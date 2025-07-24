@@ -8,10 +8,17 @@ interface Props {
 }
 
 export default function PersonalInfoStep({ onNext, defaultValues }: Props) {
-  const { register, handleSubmit } = useForm({ defaultValues });
+  const { register, handleSubmit, formState: { errors } } = useForm({ defaultValues });
   return (
     <form onSubmit={handleSubmit(onNext)}>
-      <TextField label="Recipient Name" fullWidth margin="normal" {...register('recipientName', { required: true })} />
+      <TextField 
+        label="Recipient Name" 
+        fullWidth 
+        margin="normal" 
+        {...register('recipientName', { required: 'Recipient name is required' })}
+        error={!!errors.recipientName}
+        helperText={errors.recipientName?.message as string}
+      />
       <Box mt={2} textAlign="right">
         <Button type="submit" variant="contained">Next</Button>
       </Box>

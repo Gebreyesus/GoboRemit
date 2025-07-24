@@ -10,7 +10,7 @@ interface Props {
 }
 
 export default function DocumentUploadStep({ onNext, onBack, defaultValues }: Props) {
-  const { handleSubmit, setValue, watch } = useForm({ defaultValues });
+  const { handleSubmit, setValue, watch, formState: { errors } } = useForm({ defaultValues });
   const file = watch('document');
   const onDrop = (acceptedFiles: File[]) => {
     setValue('document', acceptedFiles[0], { shouldValidate: true });
@@ -29,6 +29,9 @@ export default function DocumentUploadStep({ onNext, onBack, defaultValues }: Pr
           <Typography>Drag 'n' drop proof of payment here, or click to select file</Typography>
         )}
       </Box>
+      {errors.document && (
+        <Typography color="error" align="center">{errors.document.message as string}</Typography>
+      )}
       <Box mt={2} display="flex" justifyContent="space-between">
         <Button onClick={onBack}>Back</Button>
         <Button type="submit" variant="contained">Submit</Button>
