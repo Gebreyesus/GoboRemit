@@ -1,11 +1,12 @@
 import React, { useState } from 'react';
+import Login from './components/Login';
+import Register from './components/Register';
 import { Box, Button, Step, StepLabel, Stepper, Typography, Container, Paper } from '@mui/material';
 import PersonalInfoStep from './components/PersonalInfoStep';
 import ContactInfoStep from './components/ContactInfoStep';
 import BankingInfoStep from './components/BankingInfoStep';
 import DocumentUploadStep from './components/DocumentUploadStep';
 import { useForm, SubmitHandler } from 'react-hook-form';
-import axios from 'axios';
 
 const steps = ['Personal Info', 'Contact Info', 'Banking Info', 'Upload Document'];
 
@@ -14,7 +15,27 @@ export default function App() {
   const [formData, setFormData] = useState({});
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
-  const { control, handleSubmit } = useForm();
+  const { handleSubmit } = useForm();
+
+  // Auth state
+  const [user, setUser] = useState<any>(null);
+  const [token, setToken] = useState<string | null>(null);
+  const [showLogin, setShowLogin] = useState(true);
+
+  const handleLogin = (user: any, token: string) => {
+    setUser(user);
+    setToken(token);
+    setShowLogin(false);
+  };
+  const handleRegister = (user: any) => {
+    setUser(user);
+    setShowLogin(true);
+  };
+  const handleLogout = () => {
+    setUser(null);
+    setToken(null);
+    setShowLogin(true);
+  };
 
   const onSubmit: SubmitHandler<any> = async (data) => {
     setFormData((prev) => ({ ...prev, ...data }));
@@ -61,34 +82,58 @@ export default function App() {
   return (
     <Container maxWidth="sm" sx={{ mt: 6 }}>
       <Paper elevation={3} sx={{ p: 4 }}>
-        <Typography variant="h4" align="center" gutterBottom>
-          GoboRemit Transfer Request
-        </Typography>
-        <Stepper activeStep={activeStep} sx={{ mb: 4 }}>
-          {steps.map((label) => (
-            <Step key={label}>
-              <StepLabel>{label}</StepLabel>
-            </Step>
-          ))}
-        </Stepper>
-        <form onSubmit={handleSubmit(onSubmit)}>
-          {activeStep === 0 && <PersonalInfoStep control={control} onNext={handleNext} defaultValues={formData} />}
-          {activeStep === 1 && <ContactInfoStep control={control} onNext={handleNext} onBack={handleBack} defaultValues={formData} />}
-          {activeStep === 2 && <BankingInfoStep control={control} onNext={handleNext} onBack={handleBack} defaultValues={formData} />}
-          {activeStep === 3 && <DocumentUploadStep control={control} onNext={handleNext} onBack={handleBack} defaultValues={formData} />}
-          {activeStep === steps.length && (
-            <Box textAlign="center">
-              <Typography variant="h6" sx={{ mt: 2, mb: 2 }}>
-                All steps completed! Your request has been submitted.
-              </Typography>
-              <Button onClick={handleReset} variant="contained" color="primary">
-                Reset
-              </Button>
+        {!user ? (
+          showLogin ? (
+            <>
+              <Login onLogin={handleLogin} />
+              <Box textAlign="center" mt={2}>
+                <Button onClick={() => setShowLogin(false)} variant="text">Don't have an account? Register</Button>
+              </Box>
+            </>
+          ) : (
+            <>
+              <Register onRegister={handleRegister} />
+              <Box textAlign="center" mt={2}>
+                <Button onClick={() => setShowLogin(true)} variant="text">Already have an account? Login</Button>
+              </Box>
+            </>
+          )
+        ) : (
+          <>
+            <Box display="flex" justifyContent="space-between" alignItems="center" mb={2}>
+              <Typography variant="h6">Welcome, {user.name} ({user.role})</Typography>
+              <Button onClick={handleLogout} variant="outlined" color="secondary">Logout</Button>
             </Box>
-          )}
-        </form>
-        {error && <Typography color="error" align="center">{error}</Typography>}
-        {loading && <Typography align="center">Submitting...</Typography>}
+            <Typography variant="h4" align="center" gutterBottom>
+              GoboRemit Transfer Request
+            </Typography>
+            <Stepper activeStep={activeStep} sx={{ mb: 4 }}>
+              {steps.map((label) => (
+                <Step key={label}>
+                  <StepLabel>{label}</StepLabel>
+                </Step>
+              ))}
+            </Stepper>
+            <form onSubmit={handleSubmit(onSubmit)}>
+              {activeStep === 0 && <PersonalInfoStep onNext={handleNext} defaultValues={formData} />}
+              {activeStep === 1 && <ContactInfoStep onNext={handleNext} onBack={handleBack} defaultValues={formData} />}
+              {activeStep === 2 && <BankingInfoStep onNext={handleNext} onBack={handleBack} defaultValues={formData} />}
+              {activeStep === 3 && <DocumentUploadStep onNext={handleNext} onBack={handleBack} defaultValues={formData} />}
+              {activeStep === steps.length && (
+                <Box textAlign="center">
+                  <Typography variant="h6" sx={{ mt: 2, mb: 2 }}>
+                    All steps completed! Your request has been submitted.
+                  </Typography>
+                  <Button onClick={handleReset} variant="contained" color="primary">
+                    Reset
+                  </Button>
+                </Box>
+              )}
+            </form>
+            {error && <Typography color="error" align="center">{error}</Typography>}
+            {loading && <Typography align="center">Submitting...</Typography>}
+          </>
+        )}
       </Paper>
     </Container>
   );
