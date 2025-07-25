@@ -1,10 +1,14 @@
 import React, { useState } from 'react';
-import { TextField, Button, Typography, Box, Alert } from '@mui/material';
+import { TextField, Button, Typography, Box, Alert, InputAdornment, IconButton, Paper } from '@mui/material';
+import Logo from './Logo';
 import axios from 'axios';
+import Visibility from '@mui/icons-material/Visibility';
+import VisibilityOff from '@mui/icons-material/VisibilityOff';
 
 const Login = ({ onLogin }: { onLogin: (user: any, token: string) => void }) => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [showPassword, setShowPassword] = useState(false);
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
 
@@ -23,14 +27,39 @@ const Login = ({ onLogin }: { onLogin: (user: any, token: string) => void }) => 
   };
 
   return (
-    <Box component="form" onSubmit={handleSubmit} sx={{ maxWidth: 400, mx: 'auto', mt: 6 }}>
-      <Typography variant="h5" mb={2}>Login</Typography>
-      {error && <Alert severity="error">{error}</Alert>}
-      <TextField label="Email" type="email" value={email} onChange={e => setEmail(e.target.value)} fullWidth margin="normal" required />
-      <TextField label="Password" type="password" value={password} onChange={e => setPassword(e.target.value)} fullWidth margin="normal" required />
-      <Button type="submit" variant="contained" color="primary" fullWidth disabled={loading} sx={{ mt: 2 }}>
-        {loading ? 'Logging in...' : 'Login'}
-      </Button>
+    <Box sx={{ minHeight: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center', background: 'inherit' }}>
+      <Paper elevation={6} sx={{ p: 4, borderRadius: 4, maxWidth: 360, width: '100%', bgcolor: 'background.paper' }}>
+        <Logo size={56} />
+        <Typography variant="h5" align="center" mb={1} fontWeight={700}>
+          Welcome to GoboRemit!
+        </Typography>
+        <Typography align="center" mb={3} color="text.secondary">
+          Securely send and track your transfers
+        </Typography>
+        {error && <Alert severity="error" sx={{ mb: 2 }}>{error}</Alert>}
+        <Box component="form" onSubmit={handleSubmit}>
+          <TextField label="Email" type="email" value={email} onChange={e => setEmail(e.target.value)} fullWidth margin="normal" required sx={{ borderRadius: 2 }} />
+          <TextField label="Password" type={showPassword ? 'text' : 'password'} value={password} onChange={e => setPassword(e.target.value)} fullWidth margin="normal" required sx={{ borderRadius: 2 }}
+            InputProps={{
+              endAdornment: (
+                <InputAdornment position="end">
+                  <IconButton onClick={() => setShowPassword(v => !v)} edge="end" size="small">
+                    {showPassword ? <VisibilityOff /> : <Visibility />}
+                  </IconButton>
+                </InputAdornment>
+              ),
+            }}
+          />
+          <Button type="submit" variant="contained" color="primary" fullWidth disabled={loading} sx={{ mt: 2, borderRadius: 2, fontWeight: 700 }}>
+            {loading ? 'Logging in...' : 'LOGIN'}
+          </Button>
+        </Box>
+        <Box textAlign="center" mt={2}>
+          <Button variant="text" color="primary" size="small" sx={{ textTransform: 'none' }}>
+            Forgot password?
+          </Button>
+        </Box>
+      </Paper>
     </Box>
   );
 };
