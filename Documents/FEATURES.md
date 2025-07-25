@@ -46,3 +46,27 @@
 5. Implement S3 file upload and retrieval.
 6. Add transfer status tracking and update flows.
 7. (Optional) Add notifications and audit logging.
+
+---
+
+## Phase II: Next Steps & Progress
+
+### What Has Been Built (Phase I)
+- Monorepo structure for FE/BE
+- Multi-step transfer request form (FE)
+- File upload and validation (FE/BE)
+- Static authentication endpoints (register/login) with role support (BE)
+- Authentication flow and protected routes (FE)
+- MVP transfer request API (BE)
+
+### Phase II Goals
+- Connect authentication endpoints to a real database (Prisma/PostgreSQL)
+- Implement user registration and login with persistent storage
+- Add role-based authorization middleware (BE)
+- Build admin dashboard (FE) for managing transfers and users
+- Add transfer status tracking and update flows (FE/BE)
+- Integrate S3 for file storage (BE)
+- Display transfer history and status to users (FE)
+- Add notifications and audit logging (optional)
+
+---

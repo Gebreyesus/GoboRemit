@@ -6,7 +6,8 @@ import PersonalInfoStep from './components/PersonalInfoStep';
 import ContactInfoStep from './components/ContactInfoStep';
 import BankingInfoStep from './components/BankingInfoStep';
 import DocumentUploadStep from './components/DocumentUploadStep';
-import { useForm, SubmitHandler } from 'react-hook-form';
+import { useForm } from 'react-hook-form';
+import type { SubmitHandler } from 'react-hook-form';
 
 const steps = ['Personal Info', 'Contact Info', 'Banking Info', 'Upload Document'];
 
