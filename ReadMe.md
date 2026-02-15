@@ -156,6 +156,14 @@ This project is licensed under the MIT License. See the [LICENSE](LICENSE) file 
 
 ---
 
+## Documentation
+
+Additional documentation can be found in the `Documents/` directory:
+- [Tech Specification - Phase 1](Documents/TECH-SPEC-PHASE1.md) - Technical specifications for Phase 1 development
+- [Repository Access Status](Documents/REPOSITORY-ACCESS-STATUS.md) - Information about external repository access and integration
+
+---
+
 ## Contact
 
 For questions or suggestions, please reach out to the project maintainer at **[your-email@example.com]**.
